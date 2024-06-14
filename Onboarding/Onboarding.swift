@@ -129,6 +129,20 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
             continueButton.widthAnchor.constraint(equalToConstant: 150),
             continueButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+        
+        // Skip button
+        let skipButton = UIButton()
+        skipButton.setTitle("Skip", for: .normal)
+        skipButton.setTitleColor(.systemBlue, for: .normal)
+        skipButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        skipButton.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)
+        skipButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(skipButton)
+        
+        NSLayoutConstraint.activate([
+            skipButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+        ])
     }
 
     // MARK: Action Methods
@@ -187,6 +201,12 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         let newPage = pageControl.currentPage
         let xOffset = scrollView.frame.width * CGFloat(newPage)
         scrollView.setContentOffset(CGPoint(x: xOffset, y: 0), animated: true)
+    }
+    
+    // Handle skip button tap
+    @objc func skipButtonTapped() {
+        // Perform segue to main view directly
+        performSegue(withIdentifier: "toMainView", sender: self)
     }
 }
 
