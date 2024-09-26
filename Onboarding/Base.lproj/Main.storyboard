@@ -1,13 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hxz-TY-xmU">
     <device id="retina6_12" orientation="portrait" appearance="dark"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--View Controller2-->
+        <scene sceneID="PKn-bx-ByQ">
+            <objects>
+                <viewController id="hxz-TY-xmU" customClass="ViewController2" customModule="Onboarding" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kcc-K4-7ai">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to Begin" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UTb-ZT-3OC" userLabel="Begin">
+                                <rect key="frame" x="133" y="411.66666666666669" width="127.33333333333331" height="29"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="xvH-Es-l8i"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="UTb-ZT-3OC" firstAttribute="centerX" secondItem="kcc-K4-7ai" secondAttribute="centerX" id="Dud-9R-DxL"/>
+                            <constraint firstItem="UTb-ZT-3OC" firstAttribute="centerY" secondItem="kcc-K4-7ai" secondAttribute="centerY" id="cYL-LE-6KD"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="begin" destination="UTb-ZT-3OC" id="GYV-V1-NTA"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="toOnboarding" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="2hX-Dd-i72"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rp2-de-X66" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-763" y="-28"/>
+        </scene>
         <!--Onboarding View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -19,17 +50,18 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
-                        <segue destination="LiG-GD-lfw" kind="presentation" identifier="toMainView" modalPresentationStyle="fullScreen" id="6KT-ES-un9"/>
+                        <segue destination="LiG-GD-lfw" kind="presentation" identifier="toRestart" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="6KT-ES-un9"/>
+                        <segue destination="hxz-TY-xmU" kind="presentation" identifier="backBeginning" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="fWK-Ra-XTt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="103" y="-28"/>
+            <point key="canvasLocation" x="102" y="-28"/>
         </scene>
-        <!--View Controller-->
+        <!--View Controller1-->
         <scene sceneID="746-W7-O6O">
             <objects>
-                <viewController modalTransitionStyle="crossDissolve" id="LiG-GD-lfw" customClass="ViewController" customModule="Onboarding" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalTransitionStyle="crossDissolve" id="LiG-GD-lfw" customClass="ViewController1" customModule="Onboarding" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MTd-iq-1Gq">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -51,7 +83,7 @@
                     <navigationItem key="navigationItem" id="SCu-Mz-lGC"/>
                     <connections>
                         <outlet property="startOver" destination="cEb-nK-1Vv" id="tcg-f1-mJr"/>
-                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="toOnboarding" modalPresentationStyle="fullScreen" id="1up-W1-AZz"/>
+                        <segue destination="hxz-TY-xmU" kind="presentation" identifier="toBeginning" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="ODQ-ko-5Je"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1KI-xw-aQt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -59,6 +91,9 @@
             <point key="canvasLocation" x="963" y="-28"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="ODQ-ko-5Je"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

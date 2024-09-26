@@ -13,33 +13,39 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
     let onboardingData = [
         OnboardingData(
             icon: "gamecontroller",
+            secondIcon: "arcade.stick.console",
             header: "Gaming",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         ),
         OnboardingData(
-            icon: "airplane",
+            icon: "airplane.departure",
+            secondIcon: nil,
             header: "Flights",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         ),
         OnboardingData(
-            icon: "map.circle",
+            icon: "info.circle",
+            secondIcon: "map.circle",
             header: "Information",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         ),
         OnboardingData(
             icon: "exclamationmark.shield",
+            secondIcon: nil,
             header: "Warning",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         ),
         OnboardingData(
             icon: "bell",
+            secondIcon: nil,
             header: "Notifications",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         ),
         OnboardingData(
-            icon: "bookmark",
+            icon: "book.closed",
+            secondIcon: "bookmark",
             header: "Bookmarks",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         )
     ]
     
@@ -140,8 +146,22 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(skipButton)
         
         NSLayoutConstraint.activate([
-            skipButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            skipButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+        ])
+        
+        // Back button
+        let backButton = UIButton()
+        backButton.setTitle("Back", for: .normal)
+        backButton.setTitleColor(.systemBlue, for: .normal)
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(backButton)
+        
+        NSLayoutConstraint.activate([
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
         ])
     }
 
@@ -191,7 +211,7 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
             scrollView.setContentOffset(CGPoint(x: xOffset, y: 0), animated: true)
             pageControl.currentPage = nextPage
         } else {
-            performSegue(withIdentifier: "toMainView", sender: self)
+            performSegue(withIdentifier: "toRestart", sender: self)
         }
     }
     
@@ -206,13 +226,19 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
     // Handle skip button tap
     @objc func skipButtonTapped() {
         // Perform segue to main view directly
-        performSegue(withIdentifier: "toMainView", sender: self)
+        performSegue(withIdentifier: "toRestart", sender: self)
+    }
+    
+    // Handle back button tap
+    @objc func backButtonTapped() {
+        performSegue(withIdentifier: "backBeginning", sender: self)
     }
 }
 
 // Struct to hold data for each onboarding screen
 struct OnboardingData {
     let icon: String
+    let secondIcon: String?
     let header: String
     let description: String
 }
@@ -225,11 +251,44 @@ class OnboardingView: UIView {
     init(data: OnboardingData) {
         super.init(frame: .zero)
 
-        // Add icon image view
-        let iconImageView = UIImageView(image: UIImage(systemName: data.icon))
-        iconImageView.tintColor = .systemBlue
-        iconImageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(iconImageView)
+        // Create stack view to hold icons
+        let iconStackView = UIStackView()
+        iconStackView.axis = .horizontal
+        iconStackView.spacing = 10
+        iconStackView.alignment = .center
+        iconStackView.distribution = .equalSpacing
+        iconStackView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(iconStackView)
+
+        // Add primary icon
+        if let primaryIcon = UIImage(systemName: data.icon) {
+            let primaryIconImageView = UIImageView(image: primaryIcon)
+            primaryIconImageView.tintColor = .systemBlue
+            primaryIconImageView.translatesAutoresizingMaskIntoConstraints = false
+            iconStackView.addArrangedSubview(primaryIconImageView)
+            
+            // Maintain aspect ratio for primary icon
+            let aspectRatio = primaryIcon.size.width / primaryIcon.size.height
+            NSLayoutConstraint.activate([
+                primaryIconImageView.widthAnchor.constraint(equalToConstant: 100),
+                primaryIconImageView.heightAnchor.constraint(equalTo: primaryIconImageView.widthAnchor, multiplier: 1.0 / aspectRatio)
+            ])
+        }
+        
+        // Add secondary icon if available
+        if let secondaryIconName = data.secondIcon, let secondaryIcon = UIImage(systemName: secondaryIconName) {
+            let secondaryIconImageView = UIImageView(image: secondaryIcon)
+            secondaryIconImageView.tintColor = .systemBlue
+            secondaryIconImageView.translatesAutoresizingMaskIntoConstraints = false
+            iconStackView.addArrangedSubview(secondaryIconImageView)
+            
+            // Maintain aspect ratio for secondary icon
+            let aspectRatio = secondaryIcon.size.width / secondaryIcon.size.height
+            NSLayoutConstraint.activate([
+                secondaryIconImageView.widthAnchor.constraint(equalToConstant: 100),
+                secondaryIconImageView.heightAnchor.constraint(equalTo: secondaryIconImageView.widthAnchor, multiplier: 1.0 / aspectRatio)
+            ])
+        }
 
         // Add header label
         let headerLabel = UILabel()
@@ -241,7 +300,7 @@ class OnboardingView: UIView {
         // Add description label
         let descriptionLabel = UILabel()
         descriptionLabel.text = data.description
-        descriptionLabel.font = UIFont.systemFont(ofSize: 24)
+        descriptionLabel.font = UIFont.systemFont(ofSize: 20)
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -249,25 +308,17 @@ class OnboardingView: UIView {
         addSubview(descriptionLabel)
         
         // Set constraints for views
-        if let image = iconImageView.image {
-            let aspectRatio = image.size.width / image.size.height
-            let widthConstraint = iconImageView.widthAnchor.constraint(equalToConstant: 110)
-            let heightConstraint = iconImageView.heightAnchor.constraint(equalTo: iconImageView.widthAnchor, multiplier: 1.0 / aspectRatio)
+        NSLayoutConstraint.activate([
+            iconStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            iconStackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -100),
 
-            NSLayoutConstraint.activate([
-                widthConstraint,
-                heightConstraint,
-                iconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-                iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -100),
+            headerLabel.topAnchor.constraint(equalTo: iconStackView.bottomAnchor, constant: 20),
+            headerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 
-                headerLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 20),
-                headerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-
-                descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
-                descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
-            ])
-        }
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24)
+        ])
     }
 
     required init?(coder: NSCoder) {
