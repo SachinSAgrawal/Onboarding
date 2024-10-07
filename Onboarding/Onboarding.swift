@@ -166,6 +166,7 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
     }
 
     // MARK: Action Methods
+    
     // Handle left swipe gesture
     @objc func handleLeftSwipe(_ gesture: UISwipeGestureRecognizer) {
         handleSwipe(gesture, direction: .left)
@@ -243,7 +244,15 @@ struct OnboardingData {
     let description: String
 }
 
+// Ensure that all SF Symbols have the same aspect ratio
+class MySymImgView: UIImageView {
+    override var alignmentRectInsets: UIEdgeInsets {
+        return .zero
+    }
+}
+
 // MARK: Onboarding View
+
 // Custom view for displaying onboarding content
 class OnboardingView: UIView {
 
@@ -255,38 +264,40 @@ class OnboardingView: UIView {
         let iconStackView = UIStackView()
         iconStackView.axis = .horizontal
         iconStackView.spacing = 10
-        iconStackView.alignment = .center
+        iconStackView.alignment = .bottom
         iconStackView.distribution = .equalSpacing
         iconStackView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(iconStackView)
 
         // Add primary icon
         if let primaryIcon = UIImage(systemName: data.icon) {
-            let primaryIconImageView = UIImageView(image: primaryIcon)
+            let primaryIconImageView = MySymImgView(image: primaryIcon)
             primaryIconImageView.tintColor = .systemBlue
+            primaryIconImageView.contentMode = .scaleAspectFit
             primaryIconImageView.translatesAutoresizingMaskIntoConstraints = false
             iconStackView.addArrangedSubview(primaryIconImageView)
             
             // Maintain aspect ratio for primary icon
-            let aspectRatio = primaryIcon.size.width / primaryIcon.size.height
+            _ = primaryIcon.size.width / primaryIcon.size.height
             NSLayoutConstraint.activate([
                 primaryIconImageView.widthAnchor.constraint(equalToConstant: 100),
-                primaryIconImageView.heightAnchor.constraint(equalTo: primaryIconImageView.widthAnchor, multiplier: 1.0 / aspectRatio)
+                primaryIconImageView.heightAnchor.constraint(equalToConstant: 100),
             ])
         }
         
         // Add secondary icon if available
         if let secondaryIconName = data.secondIcon, let secondaryIcon = UIImage(systemName: secondaryIconName) {
-            let secondaryIconImageView = UIImageView(image: secondaryIcon)
+            let secondaryIconImageView = MySymImgView(image: secondaryIcon)
             secondaryIconImageView.tintColor = .systemBlue
+            secondaryIconImageView.contentMode = .scaleAspectFit
             secondaryIconImageView.translatesAutoresizingMaskIntoConstraints = false
             iconStackView.addArrangedSubview(secondaryIconImageView)
             
             // Maintain aspect ratio for secondary icon
-            let aspectRatio = secondaryIcon.size.width / secondaryIcon.size.height
+            _ = secondaryIcon.size.width / secondaryIcon.size.height
             NSLayoutConstraint.activate([
                 secondaryIconImageView.widthAnchor.constraint(equalToConstant: 100),
-                secondaryIconImageView.heightAnchor.constraint(equalTo: secondaryIconImageView.widthAnchor, multiplier: 1.0 / aspectRatio)
+                secondaryIconImageView.heightAnchor.constraint(equalToConstant: 100),
             ])
         }
 
